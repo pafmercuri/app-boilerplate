@@ -1,9 +1,9 @@
-import { gql, useMutation, useSubscription } from "@apollo/client";
 import React, { useEffect } from "react";
-import OnlineUser from "./OnlineUser";
+import { gql, useMutation, useSubscription } from "@apollo/client";
 import { UpdateLastSeenMutation, GetOnlineUsersSubscription, Online_Users } from '../../generated/graphql';
+import OnlineUser from "./OnlineUser";
 
-const UPDATE_LASTSEEN_MUTATION = gql`
+const UPDATE_LASTSEEN_MUTATION=gql`
   mutation updateLastSeen ($now: timestamptz!) {
     update_users(where: {}, _set: {last_seen: $now}) {
       affected_rows
@@ -28,18 +28,18 @@ const OnlineUsersWrapper = () => {
   const { data, loading, error } = useSubscription<GetOnlineUsersSubscription>(GET_ONLINE_USERS);
 
   useEffect(() => {
-    const onlineIndicator = setInterval(() => updateLastSeen({ variables: { now: (new Date()).toISOString() } }), 30000);
+    const onlineIndicator = setInterval(() => updateLastSeen({variables: { now: (new Date()).toISOString()}}), 20000);
     return () => clearInterval(onlineIndicator);
   });
 
-  if (loading) {
+  if(loading) {
     return (<div>Loading...</div>);
   }
-  if (error || !data) {
-    return (<div>Error...</div>);
+  if(error || !data) {
+    return(<div>Error...</div>);
   }
 
-  const onlineUsersList = data.online_users.map((user: any, index: number) => (
+  const onlineUsersList = data.online_users.map((user:any, index:number) => (
     <OnlineUser
       user={user.user}
       key={index}
@@ -49,9 +49,9 @@ const OnlineUsersWrapper = () => {
   return (
     <div className="onlineUsersWrapper">
       <div className="sliderHeader">
-      Online users - {data.online_users.length}
+        Online users - {data.online_users.length}
       </div>
-      {onlineUsersList}
+      { onlineUsersList }
     </div>
   );
 
